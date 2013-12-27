@@ -55,10 +55,8 @@ FFMPEG_FLAGS="--prefix=/${SCRATCH}/build \
   
 make -j4 
 
-$TOOLCHAIN/bin/arm-linux-androideabi-ar rcs libffmpeg.a libavutil/*.o libavutil/arm/*.o libavcodec/*.o libavcodec/arm/*.o libavformat/*.o libswresample/*.o libswresample/arm/*.o   libswscale/*.o libavfilter/*.o libavfilter/libmpcodecs/*.o   ./ffmpeg_opt.o  ./ffmpeg_filter.o   compat/*.o libpostproc/*.o  libavdevice/*.o libswscale/*.o libswscale/arm/*.o
+# pull all of the object files together into a static library
+$TOOLCHAIN/bin/arm-linux-androideabi-ar rcs libffmpeg_android.a libavutil/*.o libavutil/arm/*.o libavcodec/*.o libavcodec/arm/*.o libavformat/*.o libswresample/*.o libswresample/arm/*.o   libswscale/*.o libavfilter/*.o libavfilter/libmpcodecs/*.o   ./ffmpeg_opt.o  ./ffmpeg_filter.o   compat/*.o libpostproc/*.o  libavdevice/*.o libswscale/*.o libswscale/arm/*.o
 
-#$CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $EXTRA_LDFLAGS libavutil/*.o libavutil/arm/*.o libavcodec/*.o libavcodec/arm/*.o libavformat/*.o libswresample/*.o libswresample/arm/*.o   libswscale/*.o libavfilter/*.o libavfilter/libmpcodecs/*.o   ./ffmpeg_opt.o  ./ffmpeg_filter.o   compat/*.o libpostproc/*.o  libavdevice/*.o libswscale/*.o libswscale/arm/*.o -o libffmpeg.so
 
-cp ./libffmpeg.a ../vidtest/jni
-#cp ./libffmpeg.so ../vidtest/jni
 
