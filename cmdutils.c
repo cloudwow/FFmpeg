@@ -59,6 +59,9 @@
 #include <sys/resource.h>
 #endif
 
+// for use by the THROW/CATCH exit mechanism
+jmp_buf ex_buf__;
+
 static int init_report(const char *env);
 
 struct SwsContext *sws_opts;
@@ -116,10 +119,16 @@ void register_exit(void (*cb)(int ret))
 
 void exit_program(int ret)
 {
-    if (program_exit)
-        program_exit(ret);
+ av_log(NULL, AV_LOG_QUIET,"exit program called with code %d", ret);
+  if (program_exit) {
+    av_log(NULL, AV_LOG_QUIET,"calling program exit callback");
 
-    exit(ret);
+    program_exit(ret);
+  }
+  // For android and android app we don't want to call exit() because
+  // that would close the app.
+  // Rather than exit() we'll throw executon back to main()
+  THROW;
 }
 
 double parse_number_or_die(const char *context, const char *numstr, int type,

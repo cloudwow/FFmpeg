@@ -57,7 +57,7 @@ extern AVDictionary *format_opts, *codec_opts, *resample_opts;
  */
 void register_exit(void (*cb)(int ret));
 extern jmp_buf ex_buf__;
-// KNIGHT
+// (cloudwow) simulated c++ exceptions will allow us to  to avoid exit()
 #define TRY do{  if( !setjmp(ex_buf__) ){
 #define CATCH } else {
 #define ETRY } }while(0)

@@ -1,7 +1,10 @@
-make clean
+
+# TODO(cloudwow) need to move these to local properties
 export SCRATCH=/Volumes/Fatty/workspace/scratch
 export NDK=/Volumes/Fatty/workspace/android-ndk-r9b
+
 export TOOLCHAIN=${SCRATCH}/ffmpeg_toolchain
+# uncomment this to build the standalone toolchain
 # ${NDK}/build/tools/make-standalone-toolchain.sh --install-dir=$TOOLCHAIN
 export SYSROOT=$TOOLCHAIN/sysroot
 export PATH=$TOOLCHAIN/bin:$PATH
@@ -9,20 +12,10 @@ export CC=arm-linux-androideabi-gcc
 export LD=arm-linux-androideabi-ld
 export AR=arm-linux-androideabi-ar
 
-
-# CFLAGS="-O3 -Wall -mthumb -pipe -fpic -fasm \
-#   -finline-limit=300 -ffast-math \
-#   -fstrict-aliasing -Werror=strict-aliasing \
-#   -fmodulo-sched -fmodulo-sched-allow-regmoves \
-#   -Wno-psabi -Wa,--noexecstack \
-#   -D__ARM_ARCH_5__ -D__ARM_ARCH_5E__ \
-#   -D__ARM_ARCH_5T__ -D__ARM_ARCH_5TE__ \
-#   -DANDROID -DNDEBUG "
-
 CFLAGS="-DANDROID"
   
 EXTRA_CFLAGS="-march=armv7-a -mfpu=neon -mfloat-abi=softfp -mvectorize-with-neon-quad"
-EXTRA_LDFLAGS="-Wl,--fix-cortex-a8 -llog"
+EXTRA_LDFLAGS="-Wl,--fix-cortex-a8 -llog -lz"
 
 FFMPEG_FLAGS="--prefix=/${SCRATCH}/build \
   --target-os=linux \
@@ -45,8 +38,8 @@ FFMPEG_FLAGS="--prefix=/${SCRATCH}/build \
   --enable-decoder=mjpeg --enable-demuxer=mjpeg --enable-parser=mjpeg \
   --enable-demuxer=image2 --enable-muxer=mp4"
 
+# Can't get libx264 to work.  removing for now
 #  --enable-demuxer=image2 --enable-muxer=mp4 --enable-encoder=libx264"
-
 #  --enable-libx264  \
 #  --extra-cflags=\"-I../x264\" \
 #  --extra-ldflags=\"-L../x264\" \
