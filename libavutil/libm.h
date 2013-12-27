@@ -49,10 +49,12 @@
 #endif
 
 #if !HAVE_CBRT
+/*
 static av_always_inline double cbrt(double x)
 {
     return x < 0 ? -pow(-x, 1.0 / 3.0) : pow(x, 1.0 / 3.0);
 }
+*/
 #endif
 
 #if !HAVE_CBRTF

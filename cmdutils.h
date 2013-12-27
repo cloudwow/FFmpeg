@@ -24,6 +24,9 @@
 
 #include <stdint.h>
 
+// KNIGHT
+#include <setjmp.h>
+
 #include "libavcodec/avcodec.h"
 #include "libavfilter/avfilter.h"
 #include "libavformat/avformat.h"
@@ -53,6 +56,12 @@ extern AVDictionary *format_opts, *codec_opts, *resample_opts;
  * Register a program-specific cleanup routine.
  */
 void register_exit(void (*cb)(int ret));
+extern jmp_buf ex_buf__;
+// KNIGHT
+#define TRY do{  if( !setjmp(ex_buf__) ){
+#define CATCH } else {
+#define ETRY } }while(0)
+#define THROW longjmp(ex_buf__, 1)
 
 /**
  * Wraps exit with a program-specific cleanup routine.

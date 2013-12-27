@@ -182,10 +182,6 @@ typedef struct AVClass {
 #define AV_LOG_MAX_OFFSET (AV_LOG_DEBUG - AV_LOG_QUIET)
 
 /**
- * @}
- */
-
-/**
  * Send the specified message to the log if the level is less than or equal
  * to the current av_log_level. By default, all logging messages are sent to
  * stderr. This behavior can be altered by setting a different logging callback

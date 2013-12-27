@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+#include <android/log.h>
 
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -99,6 +100,8 @@ static const uint32_t color[16 + AV_CLASS_CATEGORY_NB] = {
 };
 
 #endif
+
+
 static int use_color = -1;
 
 static void colored_fputs(int level, const char *str)
@@ -278,23 +281,22 @@ end:
 static void (*av_log_callback)(void*, int, const char*, va_list) =
     av_log_default_callback;
 
+// knight: modified to log to android
 void av_log(void* avcl, int level, const char *fmt, ...)
 {
-    AVClass* avc = avcl ? *(AVClass **) avcl : NULL;
-    va_list vl;
-    va_start(vl, fmt);
-    if (avc && avc->version >= (50 << 16 | 15 << 8 | 2) &&
-        avc->log_level_offset_offset && level >= AV_LOG_FATAL)
-        level += *(int *) (((uint8_t *) avcl) + avc->log_level_offset_offset);
-    av_vlog(avcl, level, fmt, vl);
-    va_end(vl);
+  va_list arglist;
+
+  va_start(arglist, fmt);
+  __android_log_vprint(level, "fm.knight.ffmpeg.av_log", fmt, arglist);
+  va_end(arglist);
+
+  return;
 }
 
+// knight: modified to log to android
 void av_vlog(void* avcl, int level, const char *fmt, va_list vl)
 {
-    void (*log_callback)(void*, int, const char*, va_list) = av_log_callback;
-    if (log_callback)
-        log_callback(avcl, level, fmt, vl);
+  __android_log_vprint(ANDROID_LOG_INFO, "fm.knight.ffmpeg.av_vlog", fmt, vl);
 }
 
 int av_log_get_level(void)
